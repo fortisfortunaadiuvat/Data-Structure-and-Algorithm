@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <limits.h>
+
+//Number of vertices in the graph.
+#define V 9
+
+int MinDistance(int distance[],bool Set[] ){
+	int min=INT_MAX,min_index;
+	
+	for(int i=0;i<V;i++)
+		if(Set[i]==false&&distance[i]<=min)
+			min=distance[i],min_index=i;
+		
+	return min_index;
+}
+
+int List(int distance[],int n){
+	printf("Vertex distance from Source\n");
+	for(int i=0;i<V;i++)
+		printf("%d \t\t %d\n",i,distance[i]);
+}
+
+void Dijkstra(int graph[9][9],int source){
+	int distance[V];//The output array.
+	bool Set[V];/*sptSet[i] will be true if vertex i is included in shortest 
+                     path tree or shortest distance from src to i is finalized */
+	
+	for(int i=0;i<V;i++)
+		distance[i]=INT_MAX,Set[i]=false;
+		
+	distance[source]=0;
+	
+	for(int j=0;j<V;j++){
+		int d=MinDistance(distance,Set);
+		
+		Set[d]=true;
+		
+		for(int i=0;i<V;i++)
+			if (!Set[i] && graph[d][i] && distance[d] != INT_MAX  
+                                       && distance[d]+graph[d][i] < distance[i]) 
+            distance[i] = distance[d] + graph[d][i]; 
+     } 
+     
+    List(distance,V); 
+	}
+
+int main() { 
+   int graph[V][V] = {{0, 6, 0, 0, 0, 0, 0, 9, 0}, 
+                      {6, 0, 12, 0, 3, 0, 0, 11, 0}, 
+                      {0, 8, 0, 3, 0, 7, 0, 0, 2}, 
+                      {0, 0, 6, 0, 9, 14, 0, 0, 0}, 
+                      {0, 4, 0, 9, 0, 10, 0, 8, 0}, 
+                      {0, 0, 4, 14, 10, 0, 2, 0, 0}, 
+                      {0, 0, 0, 0, 0, 2, 0, 1, 6}, 
+                      {6, 10, 0, 0, 0, 0, 1, 0, 7}, 
+                      {0, 0, 5, 0, 0, 0, 4, 0, 0} 
+                     }; 
+   
+    Dijkstra(graph, 0); 
+   
+    return 0; 		
+}
