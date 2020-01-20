@@ -1,0 +1,51 @@
+#include<stdio.h>
+
+int on=0,arka=0,eleman=0;
+int dizi[10];
+
+void Ekle(int a)
+{
+  if(eleman<10)
+  {
+  dizi[arka]=a;
+  arka++;
+  eleman++;
+  if(arka>9) arka=0;
+
+  }
+}
+
+int Cikar()
+{
+  if(eleman>0)
+  {
+  int gonder=dizi[on];
+  on++;
+    if(on>9) on=0;
+    eleman--;
+    return gonder;
+  }
+}
+
+Listele()
+{
+  for(int i=on; i!=arka;i++)
+  {
+  printf("%d ",dizi[i]);
+    if(i>9) i=0;
+  }
+}
+
+int main()
+{
+  Ekle(4);
+  Ekle(5);
+  Ekle(7);
+  Ekle(2);
+  Ekle(1);
+  Cikar();
+  Cikar();
+  Ekle(12);
+  printf("\n");
+  Listele();
+}
