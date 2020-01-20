@@ -1,0 +1,256 @@
+Quick sort-1
+#include <stdio.h>
+void print_array(int *A, int n) {
+int i;
+for (i = 0 ; i < n ; i++)
+printf("%d ", A[i]);
+}
+/**
+* pivota gore kucukleri sola, buyukleri saga yigar ve pivotun indisini dondur
+* @A : siralanacak olan dizi
+* @ilk : siralanacak olan parcadaki ilk elemanin indisi
+* @son : siralanacak olan parcadaki son elemanin indisi (dahil)
+*/
+int bol(int * A, int ilk, int son) {
+int i = ilk - 1; // bastan (soldan) baslayan sayac
+int j = son; // sondan (sagdan) baslayan
+int v = A[ilk]; // pivot eleman (ilk elemani pivot kabul ediyoruz)
+int tmp;
+/* bu dongu pivottan kucuk olanlari sol tarafta, buyuk olanlari sag tarafta yigar */
+while (1) {
+/* pivottan buyuk olan soldan ilk elemani bul */
+while ( A[i] <= v && i <= son)
+i++;
+/* pivottan kucuk olan sagdan ilk elemani bul */
+while ( A[j] > v)
+j--;
+/* Sagdan baslayan sayac ile soldan baslayan sayac bulustugunda dur.
+Bu durumda pivottan kucukler [1,j] indis araliginda,
+buyukler [j+1, son] indis araliginda olmus olur. */
+if ( i >= j )
+break;
+/* pivottan kucuk sagdan ilk eleman ile pivottan buyuk soldan ilk elemani yer
+degistir */
+tmp = A[i];
+A[i] = A[j];
+A[j] = tmp;
+}
+/* pivot ile pivottan kucuk olan en sagdaki elemani yer degistir */
+tmp = A[ilk];
+A[ilk] = A[j];
+A[j] = tmp;
+/*
+bu asamadaki durum:
+j. indiste pivot, j'den onceki elemanlar pivottan kucuk, j'den sonrakiler pivottan buyuk.
+Yani j. eleman (pivot) tam olarak bulunmasi gereken yerde.
+
+*/
+
+return j;
+}
+/**
+* @A : siralanacak olan dizi
+* @ilk : siralanacak olan parcadaki ilk elemanin indisi
+* @son : siralanacak olan parcadaki son elemanin indisi (dahil)
+*/
+void quick_sort(int * A, int ilk, int son) {
+if (son <= ilk)
+return;
+/* pivota gore kucukleri sola, buyukleri saga yigar ve pivotun indisini dondur */
+int j = bol(A, ilk, son);
+/* pivotun solundaki ve sagindaki dizi parcalarini ayri ayri sirala */
+quick_sort(A, ilk, j-1);
+quick_sort(A, j+1, son);
+}
+int main() {
+int A[8] = {8, 4, 9, 3, 1, 2, 5, 6};
+printf("sirasiz: ");
+print_array(A, 8);
+printf("\n");
+quick_sort(A, 0, 7);
+printf("\nsiralanmis: ");
+print_array(A, 8);
+printf("\n");
+return 0;
+}
+_____________________________________________________
+Quick Sort-2
+#include <stdio.h>
+#include <stdlib.h>
+void quickSort(int *array,int first,int last){
+int i;
+int j;
+int pivot;
+int tmp;
+pivot=first;
+if(last>first){
+pivot=first;
+i=first;
+j=last;
+
+while (i<j){
+while (array[i]<=array[pivot] && i<last && j>i)
+{
+i++;
+}
+while (array[j]>=array[pivot] && j>=first && j>=i)
+{
+j--;
+}
+if (j>i){
+tmp=array[i];
+array[i]=array[j];
+array[j]=tmp;
+}
+}
+tmp=array[j];
+array[j]=array[pivot];
+array[pivot]=tmp;
+quickSort(array,first,j-1);
+quickSort(array,j+1,last);
+}
+}
+int main(){
+int *array,i,size;
+printf("Dizinin boyutunu giriniz: ");
+scanf("%d",&size);
+array=(int *)malloc(size*sizeof(int));
+for(i=0;i<size;i++){
+printf("Dizinin %d. elemani :",i+1);
+scanf("%d",&array[i]);
+}
+printf("Dizinin baslangic durumu: ");
+for(i=0;i<size;i++){
+printf("%d ",array[i]);
+}
+quickSort(array,0,size-1);
+printf("\n\nDizinin son durumu: ");
+for(i=0;i<size;i++){
+printf("%d ",array[i]);
+}
+return 0;
+}
+
+_____________________
+Merge Sort kod
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void print_array(int *A, int n) {
+int i;
+for (i = 0 ; i < n ; i++)
+
+printf("%d ", A[i]);
+}
+/**
+* A : siralanacak olan dizi
+* T : A ile ayni boyutta gecici dizi
+* ilk : siralanacak olan parcadaki ilk elemanin indisi
+* son : siralanacak olan parcadaki son elemanin indisi (dahil)
+*/
+void merge(int *A, int *T, int ilk, int son) {
+int orta = (ilk + son) / 2;
+/* islemi gormek icin birlestirilecek olan iki diziyi yazdiriyoruz */
+printf("merge: ");
+print_array(A+ilk, orta-ilk+1);
+printf(" ");
+print_array(A+orta+1, son-orta);
+printf("\n");
+/* sirali olan iki dizi birlestiriliyor */
+int i = ilk;
+int j = orta + 1;
+int k = ilk;
+while (i <= orta && j <= son) {
+if (A[i] <= A[j])
+T[k++] = A[i++];
+else
+T[k++] = A[j++];
+}
+while (i <= orta)
+T[k++] = A[i++];
+while (j <= son)
+T[k++] = A[j++];
+for (k = k-1 ; k >= 0 ; k--)
+A[k] = T[k];
+/* siralamada ilerlemeyi gormek icin B dizisini yazdiriyoruz */
+printf("T: ");
+print_array(T, 8);
+printf("\n");
+}
+/**
+* A : siralanacak olan dizi
+* T : A ile ayni boyutta gecici dizi
+* ilk : siralanacak olan parcadaki ilk elemanin indisi
+* son : siralanacak olan parcadaki son elemanin indisi (dahil)
+*/
+void merge_sort(int *A, int *T, int ilk, int son) {
+/* parcalanacak olan diziyi yazdiriyoruz */
+printf("divide: ");
+print_array(A+ilk, son-ilk+1);
+
+printf("\n");
+if (ilk < son) {
+/* ortadan ikiye bolup iki kismi ayri ayri sirala */
+int orta = (ilk + son) / 2;
+merge_sort(A, T, ilk, orta);
+merge_sort(A, T, orta+1, son);
+/* sirali olan iki diziyi birlestir */
+merge(A, T, ilk, son);
+}
+}
+int main() {
+int A[8] = {8, 2, 9, 4, 5, 3, 1, 6};
+printf("ilk: ");
+print_array(A, 8);
+printf("\n");
+/* gecici saklamanin yapilacagi dizi */
+int * T = (int*)malloc(8 * sizeof(int));
+memset(T, 0, 8*sizeof(int)); // memset sadece debug icin, normalde gerek yok
+merge_sort(A, T, 0, 7);
+free(T);
+printf("\nsiralanmis: ");
+print_array(A, 8);
+printf("\n");
+
+/*******************************
+* tek sayida eleman olunca
+*******************************/
+int A2[9] = {5, 3, 2, 1, 7, 9, 4, 6, 8};
+printf("\n\n");
+printf("ilk: ");
+print_array(A2, 9);
+printf("\n");
+T = (int*)malloc(9 * sizeof(int));
+memset(T, 0, 9*sizeof(int)); // memset sadece debug icin, normalde gerek yok
+merge_sort(A2, T, 0, 8);
+free(T);
+printf("\nsiralanmis: ");
+print_array(A2, 9);
+printf("\n");
+return 0;
+}
+
+_______________________
+Hanoi kule kod
+#include <stdio.h>
+void towers(int, char, char, char);
+int main()
+{
+int num;
+printf("disk sayısı : ");
+scanf("%d", &num);
+printf("Hanoi kulesi adımları:\n");
+towers(num, 'A', 'C', 'B');
+return 0;
+}
+void towers(int num, char frompeg, char topeg, char auxpeg)
+{
+if (num == 1)
+{
+printf("\nDisk 1 %c pladakan %c plakaya taşı", frompeg, topeg);
+return;
+}
+towers(num - 1, frompeg, auxpeg, topeg);
+printf("\nDisk %d %c plakadan %c plakaya taşı", num, frompeg, topeg);
+towers(num - 1, auxpeg, topeg, frompeg);
+}
